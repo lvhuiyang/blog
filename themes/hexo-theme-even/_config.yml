@@ -3,7 +3,7 @@
 # ===========================================
 
 # Site creation time
-since: 2015
+since: 2017
 
 # Custom your favicon.ico in `site/source`
 favicon: /favicon.ico
@@ -19,9 +19,9 @@ rss: default
 menu:
   Home: /
   Archives: /archives/
-  # Tags: /tags
+  Tags: /tags
   # Categories: /categories
-  # About: /about
+  About: /about
 
 # ===========================================
 # Theme Settings
@@ -48,16 +48,16 @@ reward:
 # Social links Settings
 # ===========================================
 social:
-  email: your@email.com
+  email: ilvhuiyang@gmail.com
   stack-overflow:
   twitter:
-  facebook:
+  facebook: https://www.facebook.com/lvhuiyang
   linkedin:
   google:
-  github:
+  github: https://github.com/lvhuiyang
   weibo:
-  zhihu:
-  douban:
+  zhihu: https://www.zhihu.com/people/dan-lan-se-liu-nian/
+  douban: https://www.douban.com/people/ilvhuiyang/
   pocket:
   tumblr:
   instagram:
