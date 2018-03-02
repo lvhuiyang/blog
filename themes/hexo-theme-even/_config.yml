@@ -50,10 +50,10 @@ reward:
 social:
   email: ilvhuiyang@gmail.com
   stack-overflow:
-  twitter: https://twitter.com/lvhuiyang
+  # twitter: https://twitter.com/lvhuiyang
   facebook: https://www.facebook.com/lvhuiyang
   linkedin:
-  google:
+  google: https://plus.google.com/100630242599258720361
   github: https://github.com/lvhuiyang
   weibo:
   zhihu: https://www.zhihu.com/people/lvhuiyang/activities
