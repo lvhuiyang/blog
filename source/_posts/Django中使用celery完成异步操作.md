@@ -1,5 +1,5 @@
 ---
-title: Django 下 celery 的使用
+title: Django中使用celery完成异步操作
 date: 2017-06-20 20:37:20
 tags: [Python, Django]
 ---
@@ -33,7 +33,7 @@ virtualenvwrapper.user_scripts creating /Users/lvhuiyang/.virtualenvs/test/bin/g
 + 使用 pip 安装 Django
 
 ``` bash
-(django-with-celery) ➜ pip install Django 
+(django-with-celery) ➜ pip install Django
 ```
 
 + 使用 django-admin 创建项目，当前目录文件如下
