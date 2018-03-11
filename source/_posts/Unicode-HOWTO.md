@@ -1,11 +1,9 @@
 ---
 layout: unicode
-title: (译)Unicode HOWTO
+title: Unicode HOWTO
 date: 2018-03-02 19:53:19
-tags: Python, Documentation, Translation
+tags: [Python, Documentation, Translation]
 ---
-
-# Unicode HOWTO
 
 【说明：本文翻译自 Python2.7 官方文档 https://docs.python.org/2/howto/unicode.html 】
 
