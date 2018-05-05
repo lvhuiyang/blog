@@ -1,5 +1,5 @@
 ---
-title: My blog HelloWorld
+title: HelloWorld
 date: 2017-06-02 10:09:11
 tags: Blog
 ---

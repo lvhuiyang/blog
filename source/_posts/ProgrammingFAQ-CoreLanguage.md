@@ -185,10 +185,151 @@ __原标题: What are the “best practices” for using import in a module?__
 
   如果需要解决诸如避免循环导入或试图减少模块初始化时间的问题，则只需将导入移动到本地范围内，例如在函数定义内部。根据程序的执行情况，如果许多导入是不必要的，这种技术特别有用。如果这些模块只能用于该功能，您可能还想将导入功能移入功能中。请注意，由于模块的一次初始化，第一次加载模块可能会很昂贵，但多次加载模块几乎是免费的，只需花费几次字典查找。即使模块名称超出范围，该模块可能在 `sys.modules` 中可用。
 
-## 6、Why are default values shared between objects?
-## 7、How can I pass optional or keyword parameters from one function to another?
-## 8、What is the difference between arguments and parameters?
-## 9、Why did changing list ‘y’ also change list ‘x’?
+## 6、为什么对象之间可以共享默认值?
+
+__原标题: Why are default values shared between objects?__
+
+这种类型的 bug 通常会让新手程序员痛苦，看一下这个函数:
+
+```Python
+def foo(mydict={}):  # Danger: shared reference to one dict for all calls
+    ... compute something ...
+    mydict[key] = value
+    return mydict
+```
+
+第一次调用这个函数时，mydict 包含了一个单独的 item。 第二次，mydict 包含两个 item，因为当 `foo()` 开始执行时，mydict 从其中已有的 item 开始。
+
+通常期望函数调用为默认值创建新对象。 这不是发生了什么。 当函数被定义时，默认值只创建一次。 如果该对象发生更改（如本示例中的字典），则对该函数的后续调用将引用此已更改的对象。
+
+根据定义，诸如数字，字符串，元组和无的不可变对象可以免于更改。 对可变对象（如字典，列表和类实例）的更改可能会导致混淆。
+
+由于这个特性，不使用可变对象作为默认值是很好的编程习惯。 相反，使用 `None` 作为默认值，并在函数内部检查参数是否为 `None` 并创建一个新的列表/字典/如果是的话。 例如，不要这样写：
+
+```Python
+def foo(mydict={}):
+    ...
+```
+
+而是要这样:
+
+```Python
+def foo(mydict=None):
+    if mydict is None:
+        mydict = {}  # create a new dict for local namespace
+```
+
+此功能可能很有用。 当你有一个计算耗时的函数时，一个常用的技术是缓存参数和函数每次调用的结果值，如果再次请求相同的值，则返回缓存的值。 这就是所谓的 `memoizing`(记忆)，可以这样实现:
+
+```Python
+# Callers will never provide a third parameter for this function.
+def expensive(arg1, arg2, _cache={}):
+    if (arg1, arg2) in _cache:
+        return _cache[(arg1, arg2)]
+
+    # Calculate the value
+    result = ... expensive computation ...
+    _cache[(arg1, arg2)] = result           # Store result in the cache
+    return result
+```
+
+您可以使用包含字典的全局变量而不是默认值，这是一个个人习惯的问题。
+
+## 7、从一个函数到另一个函数如何获取可选参数或者是关键字参数？
+
+__原标题: How can I pass optional or keyword parameters from one function to another?__
+
+在函数参数列表中使用 `*` 和 `**` 符号来收集参数，你会得到一个由 __元组__ `(tuple)` 的 __位置参数__ `(positional arguments)` 和 __字典__ `(dict)` 的 __关键字参数__ `(keyword arguments)`，你可以再次使用 `*` 和 `**` 符号将参数传递到另一个函数中：
+
+```Python
+def f(x, *args, **kwargs):
+    ...
+    kwargs['width'] = '14.3c'
+    ...
+    g(x, *args, **kwargs)
+```
+
+Python2.0 之前版本实现的话使用 `apply()` 函数：
+
+```Python
+def f(x, *args, **kwargs):
+    ...
+    kwargs['width'] = '14.3c'
+    ...
+    apply(g, (x,)+args, kwargs)
+```
+
+## 8、arguments 和 parameters 有什么不同？
+
+__原标题: What is the difference between arguments and parameters?__
+
+`parameters` 是通过出现在函数中的名称来定义的，然而 `arguments` 指的是调用函数时具体的参数的值，parameters 定义了函数中什么样 arguments 的类型是可以被接受的。
+
+```Python
+def func(foo, bar=None, **kwargs):
+    pass
+```
+
+foo，bar，kwargs 是函数 `func` 的 parameters，当调用 `func` 时：
+
+```Python
+func(42, bar=314, extra=somevar)
+```
+
+具体的值 42，314，somevar 就是 arguments。
+
+
+## 9、改变 list ‘y’ 的值为什么 ‘x’ 的值同时也改变了？
+
+__原标题: Why did changing list ‘y’ also change list ‘x’?__
+
+如果你写如下代码:
+
+```python
+>>> x = []
+>>> y = x
+>>> y.append(10)
+>>> y
+[10]
+>>> x
+[10]
+```
+ A specific case is that `a_list.pop([index])` will remove and return item at index (default last). 
+
+你可能会感到奇怪：为什么在列表 y 追加了一个元素同时也改变了 x？
+
+两个因素导致了这个结果：
+
++ 1、变量是用来引用某个对象的简单的名字。使用 `y = x` 并不会复制一个列表 - 它是创建了一个叫做 y 的变量并且引用了和变量 x 相同的对象。这意味着仅仅有一个列表对象，并且有 x 和 y 两个变量引用它。
++ 2、列表是 [可改变的对象](https://docs.python.org/2/glossary.html#term-mutable)，这意味着你可以改变它们的内容。
+
+调用 `append()` 之后，可变对象的内容从 `[]` 变成了 `[10]`，由于两个变量引用了同一个对象，使用变量会访问已经修改过的 `[10]`。
+
+如果我们把 x 赋值给一不可变对象:
+
+```python
+>>> x = 5  # int 值是不可变对象
+>>> y = x
+>>> x = x + 1  # 5 不能够被改变, 在这里创建了一个新的对象
+>>> x
+6
+>>> y
+5
+```
+
+通过这个例子我们看到 x 和 y 不再相等了。这是因为整型是 [不可变对象](https://docs.python.org/2/glossary.html#term-immutable)，当执行 `x = x + 1` 的时候不会对 5 的值进行增加，而是创建了一个新的对象（int 6）并且赋值给变量 x，也就是说改变了 x 引用的对象。新赋值之后我们现在有两个对象（int 6 和 5）并且有两个变量引用了他们（x -> 6, y -> 5）。
+
+一些操作（例如 `y.append(10)` 和 `y.sort()`）会对对象进行改变，而表面上类似的操作（例如 `y = y + [10]` 和`sorted(y)` ）会创建一个新对象。通常在 Pythoqn 中（所有示例都是在标准库中），对对象进行改变的方法将返回 `None` 以避免混淆两种操作。所以如果你错误地写 `y.sort()` 认为它会给你一个排序后 y 的复制，你最终会得到 `None`，这可能会导致你的程序产生一个比较容易诊断的错误。
+
+但是，有一类操作，其中相同操作有时具有不同类型的不同行为：`+=` 操作符。例如，`+=` 改变 list，但不改变元组(tuples)或整数(int)，`a_list + = [1,2,3]` 等同于 `a_list.extend([1,2,3])` 并且改变 a_list，而some_tuple + =（1,2 ，3）和some_int + = 1创建新的对象）。
+
+换一种说法：
+
++ 如果我们有一个可变对象（列表，字典，集合等），我们可以使用一些特定的操作来对它进行改变，并且所有引用它的变量都会看到变化。
++ 如果我们有一个不可变的对象（str，int，tuple等），所有引用它的变量将始终看到相同的值，但将该值转换为新值的操作总是返回一个新对象。
+
+如果你想知道两个变量是否指向同一个对象，你可以使用 `is` 运算符或内置函数 `id()`。
+
 ## 10、How do I write a function with output parameters (call by reference)?
 ## 11、How do you make a higher order function in Python?
 ## 12、How do I copy an object in Python?
@@ -197,4 +338,3 @@ __原标题: What are the “best practices” for using import in a module?__
 ## 15、What’s up with the comma operator’s precedence?
 ## 16、Is there an equivalent of C’s “?:” ternary operator?
 ## 17、Is it possible to write obfuscated one-liners in Python?
-## 18、Numbers and strings
