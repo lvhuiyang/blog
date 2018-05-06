@@ -357,6 +357,45 @@ A specific case is that `a_list.pop([index])` will remove and return item at ind
 
 **原标题: Is there an equivalent of C’s “?:” ternary operator?**
 
+有的，这个 feature 在 Python 2.5 中被添加进来了，语法如下：
+
+```Python
+[on_true] if [expression] else [on_false]
+
+x, y = 50, 25
+
+small = x if x < y else y
+```
+
+Python 2.5 版本之前不支持。
+
 ## 17、是否有可能使用 Python 编写 one-liners 的复杂代码？
 
 **原标题: Is it possible to write obfuscated one-liners in Python?**
+可以的，通常可以用 [lambda](https://docs.python.org/2/reference/expressions.html#lambda) 嵌套 [lambda](https://docs.python.org/2/reference/expressions.html#lambda) 的方式实现，可以看下面三个例子，由 Ulf Bartelt 实现的。
+
+```Python
+# 生成质数列表 < 1000
+print filter(None,map(lambda y:y*reduce(lambda x,y:x*y!=0,
+map(lambda x,y=y:y%x,range(2,int(pow(y,0.5)+1))),1),range(2,1000)))
+
+# 前 10 个斐波那契数列
+print map(lambda x,f=lambda x,f:(f(x-1,f)+f(x-2,f)) if x>1 else 1: f(x,f),
+range(10))
+
+# 曼德博集合（然而并不知道这是什么东西）
+print (lambda Ru,Ro,Iu,Io,IM,Sx,Sy:reduce(lambda x,y:x+y,map(lambda y,
+Iu=Iu,Io=Io,Ru=Ru,Ro=Ro,Sy=Sy,L=lambda yc,Iu=Iu,Io=Io,Ru=Ru,Ro=Ro,i=IM,
+Sx=Sx,Sy=Sy:reduce(lambda x,y:x+y,map(lambda x,xc=Ru,yc=yc,Ru=Ru,Ro=Ro,
+i=i,Sx=Sx,F=lambda xc,yc,x,y,k,f=lambda xc,yc,x,y,k,f:(k<=0)or (x*x+y*y
+>=4.0) or 1+f(xc,yc,x*x-y*y+xc,2.0*x*y+yc,k-1,f):f(xc,yc,x,y,k,f):chr(
+64+F(Ru+x*(Ro-Ru)/Sx,yc,0,0,i)),range(Sx))):L(Iu+y*(Io-Iu)/Sy),range(Sy
+))))(-2.1, 0.7, -1.2, 1.2, 30, 80, 24)
+#    \___ ___/  \___ ___/  |   |   |__ lines on screen
+#        V          V      |   |______ columns on screen
+#        |          |      |__________ maximum of "iterations"
+#        |          |_________________ range on y axis
+#        |____________________________ range on x axis
+```
+
+不要尝试这么写。
