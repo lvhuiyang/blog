@@ -7,7 +7,7 @@ tags: [Python, Documentation, Translation]
 学习编程过程中官方文档真的是非常优秀的学习材料，已经被 **python.org** 深深吸引，以下是 [Programming FAQ（原文链接）](https://docs.python.org/2/faq/programming.html) 目录，本文讨论的是 `Core Language` 部分:
 
 * General Questions
-* **Core Language [没错，就是本篇文章]**
+* **Core Language [本篇文章]**
 * Numbers and strings
 * Sequences (Tuples/Lists)
 * Dictionaries
