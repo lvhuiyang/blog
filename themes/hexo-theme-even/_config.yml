@@ -34,7 +34,7 @@ theme:
   fancybox: false
 
 copyright:
-  enable: true
+  enable: false
   # https://creativecommons.org/
   license: '<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>'
 
@@ -50,7 +50,6 @@ reward:
 social:
   email: ilvhuiyang@gmail.com
   stack-overflow:
-  # twitter: https://twitter.com/lvhuiyang
   facebook: https://www.facebook.com/lvhuiyang
   linkedin:
   google: https://plus.google.com/100630242599258720361
