@@ -5,7 +5,9 @@ date: 2018-03-02 19:53:19
 tags: [Python, Documentation, Translation]
 ---
 
-【说明：本文翻译自 Python2.7 官方文档 https://docs.python.org/2/howto/unicode.html 】
+# Unicode HOWTO
+
+【说明：本文翻译自 Python2.7 官方文档 [https://docs.python.org/2/howto/unicode.html](https://docs.python.org/2/howto/unicode.html) 】
 
 [Python HOWTOs](https://docs.python.org/2/howto/index.html) 是覆盖单个特定主题的文档，并尝试完全覆盖 Python 文档。 以 Linux 档项目的 HOWTO 为模型，尝试打造比 Python 库参考更详细的文档。
 

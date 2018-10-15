@@ -4,7 +4,9 @@ date: 2018-05-12 14:29:50
 tags: [Python, Documentation, Translation]
 ---
 
-【说明：翻译自 Python2.7 官方文档 https://docs.python.org/2/howto/logging.html 】
+# Logging HOWTO
+
+【说明：翻译自 Python2.7 官方文档 [https://docs.python.org/2/howto/logging.html](https://docs.python.org/2/howto/logging.html) 】
 
 [Python HOWTOs](https://docs.python.org/2/howto/index.html) 是覆盖单个特定主题的文档，并尝试完全覆盖 Python 文档。 以 Linux 档项目的 HOWTO 为模型，尝试打造比 Python 库参考更详细的文档。
 
@@ -88,7 +90,7 @@ logging.warning('And this, too')
 
 接下来我们打开对应生成的文件，我们能够看到日志信息：
 
-```
+```bash
 DEBUG:root:This message should go to the log file
 INFO:root:So should this
 WARNING:root:And this, too
@@ -98,7 +100,7 @@ WARNING:root:And this, too
 
 如果你想通过命令行操作参数来设置日志的级别，如下：
 
-```
+```bash
 --log=INFO
 ```
 

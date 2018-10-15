@@ -4,7 +4,9 @@ date: 2018-03-10 17:34:50
 tags: [Python, Algorthms]
 ---
 
-文章出自 https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/
+# Python 中 list 和 dict 算法复杂度分析
+
+文章出自 [https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/](https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/)
 
 <!-- more -->
 
@@ -59,7 +61,7 @@ list range  0.0655000209808 milliseconds
 
 现在我们已经看到了如何具体测试性能，见 Table2, 你可能想知道 pop 两个不同的时间。当列表末尾调用 pop 时，它需要 O(1), 但是当在列表中第一个元素或者中间任何地方调用 pop, 它是 O(n)。原因在于 Python 实现列表的方式，当一个项从列表前面取出，列表中的其他元素靠近起始位置移动一个位置。你会看到索引操作为 O(1)。python的实现者会权衡选择一个好的方案。
 
-![](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.table3.png)
+![Hello](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.table3.png)
 
 作为一种演示性能差异的方法，我们用 timeit 来做一个实验。我们的目标是验证从列表从末尾 pop 元素和从开始 pop 元素的性能。同样，我们也想测量不同列表大小对这个时间的影响。我们期望看到的是，从列表末尾处弹出所需时间将保持不变，即使列表不断增长。而从列表开始处弹出元素时间将随列表增长而增加。
 
@@ -100,7 +102,7 @@ for i in range(1000000,100000001,1000000):
 
 Figure 3 展示了我们实验的结果，你可以看到，随着列表变长，pop(0) 时间也增加，而 pop() 时间保持非常平坦。这正是我们期望看到的 O(n)和 O(1)
 
-![](https://img.lvhuiyang.cn/2.6.%E5%88%97%E8%A1%A8.poptime.png)
+![Hello](https://img.lvhuiyang.cn/2.6.%E5%88%97%E8%A1%A8.poptime.png)
 
 ## 字典（dict）
 
@@ -130,4 +132,4 @@ Figure 4 展示了 Listing6 的结果。你可以看到字典一直更快。 对
 
 由于 Python 是一种不断发展的语言，底层总是有变化的。 有关 Python 数据结构性能的最新信息可以在 Python 网站上找到。 在撰写本文时，Python wiki有一个很好的时间复杂性页面，可以在 [Time Complexity Wiki](https://wiki.python.org/moin/TimeComplexity) 中找到。
 
-![](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.figure4.png)
+![Hello](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.figure4.png)
