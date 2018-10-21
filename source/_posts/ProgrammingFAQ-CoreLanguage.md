@@ -4,8 +4,6 @@ date: 2018-03-14 19:23:43
 tags: [Python, Documentation, Translation]
 ---
 
-# Programming FAQ - Core Language
-
 学习编程过程中官方文档真的是非常优秀的学习材料，已经被 **python.org** 深深吸引，以下是 [Programming FAQ（原文链接）](https://docs.python.org/2/faq/programming.html) 目录，本文讨论的是 `Core Language` 部分:
 
 * General Questions

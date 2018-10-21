@@ -1,12 +1,10 @@
 ---
-title: Django中使用celery完成异步操作
+title: Django 中使用 celery 完成异步操作
 date: 2017-06-20 20:37:20
 tags: [Python, Django]
 ---
 
-# Django 中使用 celery 完成异步操作
-
-Deploy a web application by django with celery
+Deploy a web application by django with celery.
 
 <!-- more -->
 

@@ -4,8 +4,6 @@ date: 2018-03-10 17:34:50
 tags: [Python, Algorthms]
 ---
 
-# Python 中 list 和 dict 算法复杂度分析
-
 文章出自 [https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/](https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/)
 
 <!-- more -->

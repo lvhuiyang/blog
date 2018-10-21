@@ -4,9 +4,7 @@ date: 2018-05-12 14:29:50
 tags: [Python, Documentation, Translation]
 ---
 
-# Logging HOWTO
-
-【说明：翻译自 Python2.7 官方文档 [https://docs.python.org/2/howto/logging.html](https://docs.python.org/2/howto/logging.html) 】
+【翻译自 Python2.7 官方文档 [https://docs.python.org/2/howto/logging.html](https://docs.python.org/2/howto/logging.html) 】
 
 [Python HOWTOs](https://docs.python.org/2/howto/index.html) 是覆盖单个特定主题的文档，并尝试完全覆盖 Python 文档。 以 Linux 档项目的 HOWTO 为模型，尝试打造比 Python 库参考更详细的文档。
 
