@@ -52,7 +52,7 @@ social:
   stack-overflow:
   facebook: https://www.facebook.com/lvhuiyang
   linkedin:
-  google: https://plus.google.com/100630242599258720361
+  # google: https://plus.google.com/100630242599258720361
   github: https://github.com/lvhuiyang
   weibo:
   zhihu: https://www.zhihu.com/people/lvhuiyang/activities
@@ -81,7 +81,7 @@ google_analytics:
 google_verification:
 
 # Disqus
-disqus_shortname:
+disqus_shortname: blog-lvhuiyang-cn
 
 #Changyan
 changyan:
