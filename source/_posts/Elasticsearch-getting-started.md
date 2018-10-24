@@ -1,89 +1,134 @@
 ---
 title: Elasticsearch 01 - Getting Started
 date: 2018-10-15 14:11:57
-tags: Elasticsearch
+tags: [Elasticsearch, Translation]
 ---
 
-# 1. 入门
+学习并翻译 Elasticsearch 官方文档 [Installation and Upgrade Guide [6.4]](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)，并进行相关笔记。
 
-Elasticsearch是一个高度可扩展的开源全文搜索和分析引擎。它允许你快速、近实时地存储、搜索和分析大量数据。它通常用作底层引擎/技术，为具有复杂搜索功能和要求的应用程序提供支持。
+# Getting Started
+
+Elasticsearch 是一个高度可扩展的开源全文搜索和分析引擎。它允许你快速、近实时地存储、搜索和分析大量数据。它通常用作底层引擎或技术给复杂搜索功能和要求的应用程序提供支持。
 
 <!-- more -->
 
-以下是Elasticsearch可用于的一些示例用例：
+以下是可使用 Elasticsearch 的一些示例用例：
 
-+ 您运行在线网上商店，允许您的客户搜索您销售的产品。在这种情况下，您可以使用Elasticsearch存储整个产品目录和库存，并为它们提供搜索和自动填充建议。
++ 在线商城，提供商品和库存的查询。
 
-+ 您希望收集日志或交易数据，并且希望分析和挖掘此数据以查找趋势，统计信息，摘要或异常。在这种情况下，您可以使用Logstash（Elasticsearch / Logstash / Kibana堆栈的一部分）来收集，聚合和解析数据，然后让Logstash将此数据提供给Elasticsearch。一旦数据在Elasticsearch中，您就可以运行搜索和聚合来挖掘您感兴趣的任何信息。
++ 收集日志或交易数据，并进行相关的数据分析和挖掘，用以分析趋势，数据统计或捕获异常。这种情况下可以使用 ELK（Elasticsearch / Logstash / Kibana）技术栈进行实现。
 
-+ 您运行价格警报平台，允许精通价格的客户指定一条规则，例如“我有兴趣购买特定的电子产品，如果小工具的价格在下个月内从任何供应商降至X美元以下，我希望收到通知” 。在这种情况下，您可以刮取供应商价格，将其推入Elasticsearch并使用其反向搜索（Percolator）功能来匹配价格变动与客户查询，并最终在发现匹配后将警报推送给客户。
++ 价格分析与提醒平台。
 
-+ 您有分析/业务智能需求，并希望快速调查，分析，可视化并询问有关大量数据的特定问题（想想数百万或数十亿条记录）。在这种情况下，您可以使用Elasticsearch存储数据，然后使用Kibana（Elasticsearch / Logstash / Kibana堆栈的一部分）构建自定义仪表板，以便可视化对您来说重要的数据方面。此外，您可以使用Elasticsearch聚合功能针对您的数据执行复杂的商业智能查询。
+在本教程的其余部分中，将引导完成启动和运行 Elasticsearch ，并进行相关增删改查操作。在本教程结束时，你应该很好地了解 Elasticsearch 是什么，是如何工作的，并能够使用他来构建复杂的搜索应用或者是进行相关数据挖掘与分析。
 
-在本教程的其余部分中，将引导您完成启动和运行Elasticsearch，查看其中的内容以及执行索引，搜索和修改数据等基本操作的过程。在本教程结束时，您应该很好地了解Elasticsearch是什么，它是如何工作的，并希望能够启发它，看看如何使用它来构建复杂的搜索应用程序或从数据中挖掘智能。
+## 1. 基本概念
 
-## 1.1 基本概念
+### 近实时(NRT, Near Realtime)
 
-### 近实时 (Near Realtime, NRT)
+Elasticsearch 是一个近乎实时的搜索平台。 这意味着从索引文档到可搜索文档的时间有一点延迟（通常是一秒）。
 
-Elasticsearch是一个近乎实时的搜索平台。 这意味着从索引文档到可搜索文档的时间有一点延迟（通常是一秒）。
+### 集群(Cluster)
 
-### 集群
+集群是一个或多个节点（服务器）的集合，它们共同保存整个数据，并提供跨所有节点的联合索引和搜索功能。群集由唯一名称标识，默认情况下为“elasticsearch”。 确保不要在不同的环境中重用相同的群集名称，否则最终会导致节点加入错误的群集。例如，可以将命名为 logging-dev, logging-stage 和 logging-prod 用于开发、灰度和生产环境。
 
-集群是一个或多个节点（服务器）的集合，它们共同保存您的整个数据，并提供跨所有节点的联合索引和搜索功能。 群集由唯一名称标识，默认情况下为“elasticsearch”。 此名称很重要，因为如果节点设置为按名称加入群集，则该节点只能是群集的一部分。
+注意，如果群集中只有一个节点，那么它是完全 OK 的。 此外，您还可以拥有多个独立的集群，每个集群都有自己唯一的集群名称。
 
-确保不要在不同的环境中重用相同的群集名称，否则最终会导致节点加入错误的群集。 例如，您可以将logging-dev，logging-stage和logging-prod用于开发，登台和生产集群。
+### 节点(Node)
 
-请注意，如果群集中只有一个节点，那么它是完全正常的。 此外，您还可以拥有多个独立的集群，每个集群都有自己唯一的集群名称。
+节点是作为集群中的单个服务器，存储数据并参与群集的索引和搜索功能。就像集群一样，节点由名称标识，默认情况下，该名称是在启动时分配给节点的随机通用唯一标识符（UUID）。如果不需要默认值，可以定义所需的任何节点名称。此名称对于集群的管理非常重要，您可以在其中识别网络中哪些服务器与 Elasticsearch 集群中的哪些节点相对应。
 
-### 节点
+### 索引(Index)
 
-节点是作为群集一部分的单个服务器，存储数据并参与群集的索引和搜索功能。就像集群一样，节点由名称标识，默认情况下，该名称是在启动时分配给节点的随机通用唯一标识符（UUID）。如果不需要默认值，可以定义所需的任何节点名称。此名称对于管理目的非常重要，您可以在其中识别网络中哪些服务器与Elasticsearch集群中的哪些节点相对应。
+索引是具有某些类似特征的文档集合。 例如，你拥有客户数据的索引、产品目录的索引以及订单数据的索引。 索引由名称标识（必须全部小写），此名称用于在对其中的文档执行索引搜索、更新和删除操作时引用的操作。在单个群集中，你可以根据需要定义任意数量的索引。
 
-可以将节点配置为按群集名称加入特定群集。默认情况下，每个节点都设置为加入名为elasticsearch的集群，这意味着如果您在网络上启动了许多节点并且假设它们可以相互发现 - 它们将自动形成并加入名为elasticsearch的单个集群。
+### 类型(Type)
 
-在单个群集中，您可以拥有任意数量的节点。此外，如果您的网络上当前没有其他Elasticsearch节点正在运行，则默认情况下，启动单个节点将形成名为elasticsearch的新单节点集群。
+于 6.0.0 版本中弃用。
 
-### 索引
+### 文档(Document)
 
-索引是具有某些类似特征的文档集合。 例如，您可以拥有客户数据的索引，产品目录的另一个索引以及订单数据的另一个索引。 索引由名称标识（必须全部小写），此名称用于在对其中的文档执行索引，搜索，更新和删除操作时引用索引。
+文档是可以被索引的基本信息单元。例如，你可以为单个客户提供文档，为单个产品设置为一个文档，为单个订单设置为另一个文档，文档以 JSON 类型表示。
 
-在单个群集中，您可以根据需要定义任意数量的索引。
+### 碎片 & 副本(Shards & Replicas)
 
-### 类型
+## 2. 安装
 
-一种类型，曾经是索引的逻辑类别/分区，允许您在同一索引中存储不同类型的文档，例如，一种类型用于用户，另一种类型用于博客帖子。 不再可能在索引中创建多个类型，并且将在更高版本中删除类型的整个概念。 请参阅删除映射类型以获取更多信息。
+Elasticsearch 需要运行在 Java 8或者更新版本的 Java 环境中，具体到写该篇文章是，建议您使用 Oracle JDK 1.8.0_131 版本。Java 的安装在此不做详细介绍，在安装 Elasticsearch 之前，请先运行检查 Java版本：
 
-### 文档
+```bash
+java -version
+echo $JAVA_HOME
+```
 
-文档是可以编制索引的基本信息单元。 例如，您可以为单个客户提供文档，为单个产品提供另一个文档，为单个订单提供另一个文档。 该文档以JSON（JavaScript Object Notation）表示，JSON是一种普遍存在的互联网数据交换格式。
+### tar 安装示例（适用于 Mac OS 和 Linux）
 
-在索引/类型中，您可以根据需要存储任意数量的文档。 请注意，尽管文档实际上驻留在索引中，但实际上必须将文档编入索引/分配给索引中的类型。
+如下命令下载 Elasticsearch 6.4.2 的 tar 文件：
 
-### 碎片 & 复制
+```bash
+curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.2.tar.gz
+```
 
-索引可能存储大量可能超过单个节点的硬件限制的数据。例如，占用1TB磁盘空间的十亿个文档的单个索引可能不适合单个节点的磁盘，或者可能太慢而无法单独从单个节点提供搜索请求。
+提取（解压）文件
 
-为了解决这个问题，Elasticsearch提供了将索引细分为多个称为分片的功能。创建索引时，只需定义所需的分片数即可。每个分片本身都是一个功能齐全且独立的“索引”，可以托管在集群中的任何节点上。
+```bash
+tar -xvf elasticsearch-6.4.2.tar.gz
+```
 
-分片很重要，主要有两个原因：
+会在当前目录下创建一系列文件夹，然后进入 bin 目录
 
-它允许您水平拆分/缩放内容量
-它允许您跨分片（可能在多个节点上）分布和并行化操作，从而提高性能/吞吐量
-分片的分布方式以及如何将其文档聚合回搜索请求的机制完全由Elasticsearch管理，对用户而言是透明的。
+```bash
+cd elasticsearch-6.4.2/bin
+```
 
-在可以随时发生故障的网络/云环境中，非常有用，强烈建议使用故障转移机制，以防分片/节点以某种方式脱机或因任何原因消失。为此，Elasticsearch允许您将索引的分片的一个或多个副本制作成所谓的副本分片或简称副本。
+启动节点和单个集群：
 
-复制很重要，主要有两个原因：
+```bash
+./ elasticsearch
+```
 
-它在碎片/节点发生故障时提供高可用性。因此，请务必注意，副本分片永远不会在与从中复制的原始/主分片相同的节点上分配。
-它允许您扩展搜索量/吞吐量，因为可以在所有副本上并行执行搜索。
-总而言之，每个索引可以拆分为多个分片。索引也可以复制为零（表示没有副本）或更多次。复制后，每个索引都将具有主分片（从中复制的原始分片）和副本分片（主分片的副本）。
+### 使用 MSI Windows Installer 的安装示例（适用于 Windows）
 
-可以在创建索引时为每个索引定义分片和副本的数量。创建索引后，您还可以随时动态更改副本数。您可以使用_shrink和_split API更改现有索引的分片数，但这不是一项简单的任务，预先计划正确数量的分片是最佳方法。
+略
 
-默认情况下，Elasticsearch中的每个索引都分配了5个主分片和1个副本，这意味着如果群集中至少有两个节点，则索引将包含5个主分片和另外5个副本分片（1个完整副本），总计为每个索引10个分片。
+### 成功运行节点
 
-## 安装
+如果安装顺利，应该能看到如下所示的消息：
 
-writing...
+```bash
+[2018-10-24T19:37:26,684][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [aggs-matrix-stats]
+[2018-10-24T19:37:26,685][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [analysis-common]
+[2018-10-24T19:37:26,685][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [ingest-common]
+[2018-10-24T19:37:26,686][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [lang-expression]
+[2018-10-24T19:37:26,686][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [lang-mustache]
+[2018-10-24T19:37:26,686][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [lang-painless]
+[2018-10-24T19:37:26,687][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [mapper-extras]
+[2018-10-24T19:37:26,687][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [parent-join]
+[2018-10-24T19:37:26,687][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [percolator]
+[2018-10-24T19:37:26,687][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [rank-eval]
+[2018-10-24T19:37:26,688][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [reindex]
+[2018-10-24T19:37:26,688][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [repository-url]
+[2018-10-24T19:37:26,688][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [transport-netty4]
+[2018-10-24T19:37:26,689][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [tribe]
+[2018-10-24T19:37:26,689][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-core]
+[2018-10-24T19:37:26,689][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-deprecation]
+[2018-10-24T19:37:26,690][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-graph]
+[2018-10-24T19:37:26,690][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-logstash]
+[2018-10-24T19:37:26,690][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-ml]
+[2018-10-24T19:37:26,691][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-monitoring]
+[2018-10-24T19:37:26,691][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-rollup]
+[2018-10-24T19:37:26,691][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-security]
+[2018-10-24T19:37:26,691][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-sql]
+[2018-10-24T19:37:26,692][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-upgrade]
+[2018-10-24T19:37:26,692][INFO ][o.e.p.PluginsService     ] [6A3cdtb] loaded module [x-pack-watcher]
+```
+
+在不详细讨论的情况下，我们可以看到名为 “6A3cdtb” 的节点（可能将是一组不同的字符）已经启动并选择自己作为单个集群中的主节点。当前不需要担心它们的具体含义，重点是知道当前启动了集群的一个节点就 OK。
+
+如前所述，我们可以覆盖集群或节点名称。这可以在启动 Elasticsearch 时从命令行完成，如下所示：
+
+```bash
+./elasticsearch -Ecluster.name=my_cluster_name -Enode.name=my_node_name
+```
+
+注意标有 http 的行，其中包含有关可从中访问节点的 HTTP 地址（192.168.8.112）和端口（9200）的信息。默认情况下，Elasticsearch 使用 9200 端口（可配置）来提供对其 REST API 的访问。
