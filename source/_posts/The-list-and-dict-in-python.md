@@ -1,7 +1,7 @@
 ---
 title: Python 中 list 和 dict 算法复杂度分析
 date: 2018-03-10 17:34:50
-tags: [Python, Algorthms]
+tags: [Python, Algorithm]
 ---
 
 文章出自 [https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/](https://xidianwlc.gitbooks.io/python-data-structrue-and-algrothms/content/)
@@ -106,7 +106,7 @@ Figure 3 展示了我们实验的结果，你可以看到，随着列表变长�
 
 python 中第二个主要的数据结构是字典。你可能记得，字典和列表不同，你可以通过键而不是位置来访问字典中的项目。在本书的后面，你会看到有很多方法来实现字典。字典的 get 和 set 操作都是 O(1)。另一个重要的操作是 contains，检查一个键是否在字典中也是 O(1)。所有字典操作的效率总结在 Table3 中。关于字典性能的一个重要方面是，我们在表中提供的效率是针对平均性能。 在一些罕见的情况下，contains，get item 和 set item 操作可以退化为 O(n)。我们将在后面的章节介绍。
 
-![](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.table3.png)
+![Hello](https://img.lvhuiyang.cn/2.7.%E5%AD%97%E5%85%B8.table3.png)
 
 我们会在最后的实验中，将比较列表和字典之间的 contains 操作的性能。在此过程中，我们将确认列表的 contains 操作符是 O(n)，字典的 contains 操作符是 O(1)。我们将在实验中列出一系列数字。然后随机选择数字，并检查数字是否在列表中。如果我们的性能表是正确的，列表越大，确定列表中是否包含任意一个数字应该花费的时间越长。
 
