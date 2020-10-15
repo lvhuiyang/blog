@@ -1,5 +1,5 @@
 ---
-title: Elasticsearch 01 - Getting Started
+title: 『暂时弃坑』Elasticsearch 01 - Getting Started
 date: 2018-10-15 14:11:57
 tags: [Elasticsearch, Translation]
 ---
