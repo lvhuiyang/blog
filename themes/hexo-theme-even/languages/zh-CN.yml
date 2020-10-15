@@ -6,8 +6,8 @@ menu:
   about: 关于
 
 footer:
-  powered: "由 %s 强力驱动"
-  theme: 主题
+  powered: "Powered by %s"
+  theme: Theme
 
 posts:
   prev: 上一页

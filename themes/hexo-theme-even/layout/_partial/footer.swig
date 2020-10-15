@@ -21,8 +21,7 @@
     {%- endif -%} 
 
     <span class="heart">
-      <i class="iconfont icon-heart"></i>
     </span>
-    <span class="author">{{ config.author }}</span>
+    <span class="author">Author: {{ config.author }}</span>
   </span>
 </div>
